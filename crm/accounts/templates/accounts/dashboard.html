@@ -1,0 +1,60 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<div class="row p-3 g-3">
+    <div class="col-md-6 p-3 border border-secondary">
+        <h2 class="text-center">Products</h2>
+        <hr>
+        <div class="card card-body">
+            <p>View and manage your products.</p>
+            <a href="" class="btn btn-primary">Create Product</a>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Product 1</td>
+                        <td>$10.00</td>
+                    </tr>
+                    <tr>
+                        <td>Product 2</td>
+                        <td>$20.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6 p-3 border border-secondary">
+        <h2 class="text-center">Customers</h2>
+        <hr>
+        <div class="card card-body">
+            <p>View and manage your customers.</p>
+            <a href="" class="btn btn-primary">Create Customer</a>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Customer 1</td>
+                        <td>customer1@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>Customer 2</td>
+                        <td>customer2@example.com</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
