@@ -5,3 +5,4 @@ migrations/
 *.log
 *.env
 venv/
+crash-course-crm/
