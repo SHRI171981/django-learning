@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Product, Customer, Order
+from .forms import OrderForm
 
 # Dashboard view
 def home(request):
@@ -51,3 +52,35 @@ def product(request, pk_test):
         'product': product
     }
     return render(request, 'accounts/single_product.html', context)
+
+
+def createOrder(request):
+    form = OrderForm()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form }
+    return render(request, 'accounts/order_form.html', context)
+
+
+def updateOrder(request, pk_test):
+    order = Order.objects.get(id=pk_test)
+    form = OrderForm(instance=order)
+    if request.method == 'POST':
+        form = OrderForm(request.POST, instance=order) # instance=order argument is used to specify that the form should be pre-populated with the existing data of the order being updated. This allows the user to see the current values and make changes to them.
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form }
+    return render(request, 'accounts/order_form.html', context)
+
+
+def deleteOrder(request, pk_test):
+    order = Order.objects.get(id=pk_test)
+    if request.method == 'POST':
+        order.delete()
+        return redirect('/')
+    context = {'item': order }
+    return render(request, 'accounts/delete_order.html', context) 

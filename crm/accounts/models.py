@@ -45,3 +45,6 @@ class Order(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=200, null=True, choices=STATUS) # choices is used to limit the options for the field to a predefined set of values.
+
+    def __str__(self):
+        return f"{self.product.name} ordered by {self.customer.name}"
