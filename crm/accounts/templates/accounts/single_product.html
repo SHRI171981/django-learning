@@ -1,0 +1,30 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4">Product Details</h1>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ product.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                    <p><strong>Description:</strong> {{ product.description }}</p>
+                    <p><strong>Date Created:</strong> {{ product.date_created }}</p>
+                    <p><strong>Category:</strong> {{ product.category }}</p>
+                    <p><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
+                </div>
+                <div class="card-footer">
+                    <a href="/product/{{ product.id }}" class="btn btn-sm btn-info">View</a>
+                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+{% endblock %}

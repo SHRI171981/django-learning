@@ -31,3 +31,23 @@ def products(request):
 def customers(request):
     customers = Customer.objects.all()
     return render(request, 'accounts/customer.html', {'customers': customers})
+
+
+def customer(request, pk_test):
+    customer = Customer.objects.get(id=pk_test)
+    orders = customer.order_set.all()
+    order_count = orders.count()
+    context = {
+        'customer': customer,
+        'orders': orders,
+        'order_count': order_count
+    }
+    return render(request, 'accounts/single_customer.html', context)
+
+
+def product(request, pk_test):
+    product = Product.objects.get(id=pk_test)
+    context = {
+        'product': product
+    }
+    return render(request, 'accounts/single_product.html', context)

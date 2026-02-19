@@ -56,8 +56,8 @@
                         <tbody>
                             {% for order in orders %}
                             <tr>
-                                <td>{{ order.customer.name }}</td>
-                                <td>{{ order.product.name }}</td>
+                                <td><a href="/customer/{{ order.customer.id }}">{{ order.customer.name }}</a></td>
+                                <td><a href="/product/{{ order.product.id }}">{{ order.product.name }}</a></td>
                                 <td>{{ order.status }}</td>
                                 <td>{{ order.date_created|date:"Y-m-d H:i" }}</td>
                             </tr>
