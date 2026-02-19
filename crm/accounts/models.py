@@ -26,7 +26,6 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=255, null=True)
     price = models.FloatField(null=True)
-    category = models.CharField(max_length=255, null=True)
     description = models.TextField(null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=200, null=True, choices=CATEGORY) # choices is used to limit the options for the field to a predefined set of values.
