@@ -41,6 +41,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="text-end">
+                <a href="{% url 'create_order' customer.id %}" class="btn btn-primary">Create New Order</a>
+            </div>
         </div>
     </div>
 </div>
