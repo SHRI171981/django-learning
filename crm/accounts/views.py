@@ -7,26 +7,30 @@ from .filters import OrderFilter
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
+
+@unauthenticated_user
 def registerUser(request):
-    if request.user.is_authenticated:
-        return redirect('home')
     form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='customers')
+            user.groups.add(group)
+            messages.success(request, 'Account was created for ' + username)
             return redirect('login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
 
+@unauthenticated_user
 def loginUser(request):
-    if request.user.is_authenticated:
-        return redirect('home')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -46,6 +50,7 @@ def logoutUser(request):
 
 # Dashboard view
 @login_required(login_url='login')
+@admin_only
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -53,10 +58,8 @@ def home(request):
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
-
     myFilter = OrderFilter(request.GET, queryset=orders)
     orders = myFilter.qs # qs is the filtered queryset
-
     context = {
         'orders': orders,
         'customers': customers,
@@ -66,8 +69,12 @@ def home(request):
         'pending': pending,
         'myFilter': myFilter
     }
-
     return render(request, 'accounts/dashboard.html', context)
+
+
+def userPage(request):
+    context = {}
+    return render(request, 'accounts/user.html', context)
 
 
 @login_required(login_url='login')
