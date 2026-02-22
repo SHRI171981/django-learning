@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from .models import Product, Customer, Order
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -112,6 +112,20 @@ def product(request, pk_test):
         'product': product
     }
     return render(request, 'accounts/single_product.html', context)
+
+
+@login_required(login_url='login')
+def accountSettings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account updated successfully!')
+            return redirect('account-settings')
+    context = {'form': form, 'customer': customer}
+    return render(request, 'accounts/account_settings.html', context)
 
 
 @login_required(login_url='login')

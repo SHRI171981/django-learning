@@ -4,14 +4,294 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM</title>
+    <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Page wrapper ── */
+        .page-content {
+            flex: 1;
+            padding: 2rem 0 3rem;
+        }
+
+        /* ── Stat Cards ── */
+        .stat-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: transform 0.15s, box-shadow 0.15s;
+            overflow: hidden;
+            position: relative;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .stat-card .card-body { padding: 1.4rem 1.2rem; }
+        .stat-card .stat-icon {
+            width: 42px; height: 42px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-bottom: 0.8rem;
+        }
+        .stat-card .stat-icon svg { width: 22px; height: 22px; fill: #ffffff; }
+        .stat-card .stat-label {
+            font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.8px; color: #6b7280; margin-bottom: 0.3rem;
+        }
+        .stat-card .stat-value {
+            font-size: 1.8rem; font-weight: 700; color: #1a1a2e; line-height: 1;
+        }
+        .stat-customers .stat-icon { background: linear-gradient(135deg, #0f3460, #1a5276); }
+        .stat-orders .stat-icon   { background: linear-gradient(135deg, #533483, #6c3d99); }
+        .stat-delivered .stat-icon { background: linear-gradient(135deg, #059669, #10b981); }
+        .stat-pending .stat-icon  { background: linear-gradient(135deg, #d97706, #f59e0b); }
+
+        /* ── Panel / Content Cards ── */
+        .panel {
+            background: #ffffff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .panel-header {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .panel-header h5 {
+            font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 0;
+        }
+        .panel-body { padding: 0; }
+        .panel-body-padded { padding: 1.4rem; }
+        .panel-footer {
+            padding: 1rem 1.4rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        /* ── Tables ── */
+        .crm-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .crm-table thead th {
+            padding: 0.75rem 1rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+            text-align: left;
+        }
+        .crm-table tbody td {
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+        .crm-table tbody tr:last-child td { border-bottom: none; }
+        .crm-table tbody tr:hover { background: #f7f8fc; }
+        .crm-table a { color: #0f3460; text-decoration: none; font-weight: 600; }
+        .crm-table a:hover { text-decoration: underline; }
+
+        /* ── Badges ── */
+        .badge-status {
+            display: inline-block;
+            padding: 0.28rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-pending     { background: #fef3c7; color: #92400e; }
+        .badge-delivered    { background: #d1fae5; color: #065f46; }
+        .badge-out-delivery { background: #dbeafe; color: #1e40af; }
+        .badge-active       { background: #d1fae5; color: #065f46; }
+
+        /* ── Buttons ── */
+        .btn-crm {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.42rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        .btn-crm:hover { opacity: 0.88; }
+        .btn-crm:active { transform: scale(0.97); }
+        .btn-primary-crm {
+            background: linear-gradient(135deg, #0f3460, #533483);
+            color: #ffffff;
+        }
+        .btn-edit {
+            background: #eef2ff; color: #3730a3;
+        }
+        .btn-edit:hover { background: #e0e7ff; color: #3730a3; }
+        .btn-delete {
+            background: #fef2f2; color: #991b1b;
+        }
+        .btn-delete:hover { background: #fee2e2; color: #991b1b; }
+        .btn-view {
+            background: #ecfdf5; color: #065f46;
+        }
+        .btn-view:hover { background: #d1fae5; color: #065f46; }
+        .btn-ghost {
+            background: transparent; color: #6b7280;
+            border: 1.5px solid #d1d5db;
+        }
+        .btn-ghost:hover { border-color: #9ca3af; color: #374151; }
+
+        /* ── Filter panel ── */
+        .filter-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 1.2rem 1.4rem;
+        }
+        .filter-panel h5 {
+            font-size: 0.9rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.8rem;
+        }
+        .filter-panel label {
+            font-size: 0.78rem; font-weight: 600; color: #374151;
+        }
+        .filter-panel input,
+        .filter-panel select {
+            padding: 0.45rem 0.7rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #111827;
+            background: #f9fafb;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-panel input:focus,
+        .filter-panel select:focus {
+            border-color: #0f3460;
+            box-shadow: 0 0 0 2px rgba(15,52,96,0.08);
+        }
+
+        /* ── Section headers ── */
+        .page-title {
+            font-size: 1.5rem; font-weight: 700; color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+        .page-subtitle {
+            font-size: 0.88rem; color: #6b7280; margin-top: 0.15rem;
+        }
+
+        /* ── Detail info ── */
+        .detail-row {
+            display: flex; gap: 0.6rem; align-items: baseline;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label {
+            font-weight: 600; color: #6b7280; min-width: 130px;
+            font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .detail-value { color: #1a1a2e; font-weight: 500; }
+
+        /* ── Empty states ── */
+        .empty-state {
+            text-align: center; padding: 2.5rem 1rem; color: #9ca3af;
+        }
+        .empty-state svg { width: 48px; height: 48px; fill: #d1d5db; margin-bottom: 0.8rem; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* ── Messages / alerts ── */
+        .alert-crm {
+            padding: 0.7rem 1rem; border-radius: 8px;
+            font-size: 0.85rem; font-weight: 500; margin-bottom: 1rem;
+        }
+        .alert-success { background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; }
+        .alert-info    { background: #dbeafe; border: 1px solid #93c5fd; color: #1e40af; }
+        .alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+        /* ── Form styling (for formsets, update forms) ── */
+        .crm-form label {
+            display: block; font-size: 0.82rem; font-weight: 600;
+            color: #374151; margin-bottom: 0.35rem;
+        }
+        .crm-form input,
+        .crm-form select,
+        .crm-form textarea {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #111827;
+            background: #f9fafb;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 0.8rem;
+        }
+        .crm-form input:focus,
+        .crm-form select:focus,
+        .crm-form textarea:focus {
+            border-color: #0f3460;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(15,52,96,0.1);
+        }
+        .crm-form hr {
+            border: none; border-top: 1px solid #e5e7eb; margin: 1rem 0;
+        }
+
+        /* ── Pagination ── */
+        .pagination .page-link {
+            font-size: 0.85rem; color: #0f3460; border-color: #e5e7eb;
+        }
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, #0f3460, #533483);
+            border-color: transparent; color: #fff;
+        }
+
+        /* ── Footer ── */
+        .crm-footer {
+            background: #1a1a2e;
+            color: rgba(255,255,255,0.45);
+            text-align: center;
+            padding: 1.2rem 1rem;
+            font-size: 0.78rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .page-content { padding: 1rem 0 2rem; }
+        }
+    </style>
 </head>
 <body>
     {% include 'accounts/navbar.html' %}
-    <br>
 
-    {% block content %}
-    {% endblock %}
+    <div class="page-content">
+        {% block content %}
+        {% endblock %}
+    </div>
 
-    <br>
-    <h5>Footer</h5>
+    <footer class="crm-footer">
+        &copy; 2026 CRM Platform &middot; Built with Django
+    </footer>
 </body>

@@ -2,11 +2,28 @@
 
 {% block content %}
 
-<p>Are you sure you want to delete the order "{{ item }}"?</p>
-<form method="POST">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="panel" style="text-align: center;">
+                <div class="panel-body-padded" style="padding: 2.5rem 2rem;">
+                    <!-- Warning icon -->
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: #fef2f2; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                        <svg viewBox="0 0 24 24" style="width: 28px; height: 28px; fill: #dc2626;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    </div>
+                    <h2 style="font-size: 1.3rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.5rem;">Confirm Deletion</h2>
+                    <p style="font-size: 0.92rem; color: #6b7280; margin-bottom: 1.8rem;">Are you sure you want to delete the order "<strong>{{ item }}</strong>"?<br>This action cannot be undone.</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="submit" class="btn-crm btn-delete" style="padding: 0.55rem 1.4rem; font-size: 0.9rem;">Delete</button>
+                            <a href="{% url 'home' %}" class="btn-crm btn-ghost" style="padding: 0.55rem 1.4rem; font-size: 0.9rem;">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

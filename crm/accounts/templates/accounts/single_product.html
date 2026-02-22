@@ -2,29 +2,49 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container py-3">
+
+    <div class="mb-4">
+        <a href="{% url 'products' %}" class="btn-crm btn-ghost" style="margin-bottom: 0.8rem; display: inline-flex;">
+            &larr; Back to Products
+        </a>
+        <h1 class="page-title">Product Details</h1>
+        <p class="page-subtitle">Viewing information for {{ product.name }}</p>
+    </div>
+
     <div class="row">
-        <div class="col-md-12">
-            <h1 class="text-center mb-4">Product Details</h1>
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">{{ product.name }}</h5>
+        <div class="col-md-8">
+            <div class="panel">
+                <div class="panel-header">
+                    <h5>{{ product.name }}</h5>
+                    <span class="badge-status badge-active">Active</span>
                 </div>
-                <div class="card-body">
-                    <p><strong>Price:</strong> ${{ product.price }}</p>
-                    <p><strong>Description:</strong> {{ product.description }}</p>
-                    <p><strong>Date Created:</strong> {{ product.date_created }}</p>
-                    <p><strong>Category:</strong> {{ product.category }}</p>
-                    <p><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
+                <div class="panel-body-padded">
+                    <div class="detail-row">
+                        <span class="detail-label">Price</span>
+                        <span class="detail-value">${{ product.price }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Category</span>
+                        <span class="detail-value">{{ product.category }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value">{{ product.description }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date Created</span>
+                        <span class="detail-value">{{ product.date_created|date:"M d, Y H:i" }}</span>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <a href="/product/{{ product.id }}" class="btn btn-sm btn-info">View</a>
-                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                <div class="panel-footer d-flex gap-2">
+                    <a href="#" class="btn-crm btn-edit">Edit</a>
+                    <a href="#" class="btn-crm btn-delete">Delete</a>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
                 
 {% endblock %}

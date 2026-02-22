@@ -2,15 +2,53 @@
 
 {% block content %}
 
-<form actions="" method="POST">
-    
-    {% csrf_token %}
-    {{ formset.management_form }}
-    {% for form in formset %}
-        {{ form }}
-        <hr>
-    {% endfor %}
-    <input type="submit" name="submit">
-</form>
+<div class="container py-3">
+
+    <div class="mb-4">
+        <a href="/" class="btn-crm btn-ghost" style="margin-bottom: 0.8rem; display: inline-flex;">
+            &larr; Back to Dashboard
+        </a>
+        <h1 class="page-title">{% if formset %}Create Orders{% else %}Update Order{% endif %}</h1>
+        <p class="page-subtitle">{% if formset %}Add new orders for this customer{% else %}Edit order details{% endif %}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel">
+                <div class="panel-body-padded">
+                    <form actions="" method="POST" class="crm-form">
+                        {% csrf_token %}
+                        {% if formset %}
+                            {{ formset.management_form }}
+                            {% for form in formset %}
+                                <div class="row g-3 align-items-end">
+                                    {% for field in form %}
+                                    <div class="col">
+                                        <label>{{ field.label }}</label>
+                                        {{ field }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        {% elif form %}
+                            {% for field in form %}
+                            <div style="margin-bottom: 1rem;">
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="d-flex gap-2" style="margin-top: 1.2rem;">
+                            <button type="submit" name="submit" class="btn-crm btn-primary-crm">Save</button>
+                            <a href="/" class="btn-crm btn-ghost">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
