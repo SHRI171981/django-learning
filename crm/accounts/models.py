@@ -3,6 +3,9 @@ from django.db import models
 # Create your models here.
 
 class Customer(models.Model):
+    user = models.OneToOneField('auth.User', null=True, blank=True, on_delete=models.CASCADE) 
+    # OneToOneField is used to create a one-to-one relationship between two models. 
+    # on_delete=models.CASCADE argument specifies that if the related object is deleted, the customer will also be deleted.
     name = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
